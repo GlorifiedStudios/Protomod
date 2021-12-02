@@ -1,0 +1,1 @@
+*.asset !text !filter !merge !diff
