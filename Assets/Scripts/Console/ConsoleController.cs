@@ -66,10 +66,7 @@ public class ConsoleController : MonoBehaviour
 
     void Update()
     {
-        if( Input.GetKeyDown( KeyCode.Tilde ) )
-        {
-            Debug.Log( "Boidahellboi" );
+        if( Input.GetKeyDown( KeyCode.F1 ) )
             ToggleConsole();
-        }
     }
 }
