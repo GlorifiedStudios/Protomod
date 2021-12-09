@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿
 using UnityEngine;
 
 public class CharacterLook : MonoBehaviour
@@ -14,7 +13,7 @@ public class CharacterLook : MonoBehaviour
     {
         xAxisClamp = 0.0f;
         Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false; // to-do: make a less confusing cursor handler, because it's being called from this script and ConsoleController
+        Cursor.visible = false; // TODO: Make a less confusing cursor handler, because it's being called from this script and ConsoleController.
     }
 
     private void Update()
@@ -30,11 +29,13 @@ public class CharacterLook : MonoBehaviour
 
         xAxisClamp += mouseY;
 
-        if( xAxisClamp > 90.0f ) {
+        if( xAxisClamp > 90.0f )
+        {
             xAxisClamp = 90.0f;
             mouseY = 0.0f;
             ClampXAxisRotationToValue( 270.0f );
-        } else if ( xAxisClamp < -90.0f ) {
+        } else if( xAxisClamp < -90.0f )
+        {
             xAxisClamp = -90.0f;
             mouseY = 0.0f;
             ClampXAxisRotationToValue( 90.0f );

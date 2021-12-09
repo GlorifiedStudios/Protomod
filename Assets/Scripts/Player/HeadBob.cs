@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿
 using UnityEngine;
 
 public class HeadBob : MonoBehaviour
@@ -10,7 +9,8 @@ public class HeadBob : MonoBehaviour
     private float midpoint = 0.0f;
     private float timer = 0.0f;
 
-    void Awake() {
+    void Awake()
+    {
         midpoint = transform.localPosition.y;
     }
 
@@ -23,9 +23,11 @@ public class HeadBob : MonoBehaviour
 
         Vector3 cSharpConversion = transform.localPosition;
 
-        if( Mathf.Abs( horizontal ) == 0 && Mathf.Abs( vertical ) == 0 ) {
+        if( Mathf.Abs( horizontal ) == 0 && Mathf.Abs( vertical ) == 0 )
+        {
             timer = 0.0f;
-        } else {
+        } else
+        {
             waveslice = Mathf.Sin( timer );
             timer = timer + bobbingSpeed;
             if( timer > Mathf.PI * 2 )
@@ -34,13 +36,15 @@ public class HeadBob : MonoBehaviour
             }
         }
 
-        if ( waveslice != 0 ) {
+        if( waveslice != 0 )
+        {
             float translateChange = waveslice * bobbingAmount;
             float totalAxes = Mathf.Abs( horizontal ) + Mathf.Abs( vertical );
             totalAxes = Mathf.Clamp( totalAxes, 0.0f, 1.0f );
             translateChange = totalAxes * translateChange;
             cSharpConversion.y = midpoint + translateChange;
-        } else {
+        } else
+        {
             cSharpConversion.y = midpoint;
         }
 

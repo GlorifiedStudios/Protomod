@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿
 using UnityEngine;
 
 public class CharacterMove : MonoBehaviour
@@ -11,20 +10,24 @@ public class CharacterMove : MonoBehaviour
     private CharacterController charController;
     private bool walking = false;
 
-    private void Start() {
+    private void Start()
+    {
         if( footstepSource == null || footstepSounds == null ) { return; }
         InvokeRepeating( "FootstepSounds", 0, 0.5f );
     }
 
-    private void Awake() {
+    private void Awake()
+    {
         charController = GetComponent<CharacterController>();
     }
 
-    private void Update() {
+    private void Update()
+    {
         PlayerMovement();
     }
 
-    private void PlayerMovement() {
+    private void PlayerMovement()
+    {
         float horizontal = Input.GetAxis( "Horizontal" ) * movementSpeed;
         float vertical = Input.GetAxis( "Vertical" ) * movementSpeed;
         if( ConsoleController.consoleActive ) { horizontal = 0; vertical = 0; }
@@ -37,8 +40,10 @@ public class CharacterMove : MonoBehaviour
         walking = speed != Vector3.zero;
     }
 
-    void FootstepSounds() {
-        if( walking ) {
+    void FootstepSounds()
+    {
+        if( walking )
+        {
             footstepSource.clip = footstepSounds[Random.Range( 0, footstepSounds.Length )];
             footstepSource.Play();
         }
