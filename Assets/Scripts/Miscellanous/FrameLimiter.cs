@@ -1,13 +1,16 @@
 ﻿
 using UnityEngine;
 
-public class FrameLimiter : MonoBehaviour
+namespace Protomod
 {
-    [SerializeField] private int framerateLimit = 67;
-
-    void Awake()
+    public class FrameLimiter : MonoBehaviour
     {
-        QualitySettings.vSyncCount = 0;
-        Application.targetFrameRate = framerateLimit;
+        [SerializeField] private int framerateLimit = 67;
+
+        void Awake()
+        {
+            QualitySettings.vSyncCount = 0;
+            Application.targetFrameRate = framerateLimit;
+        }
     }
 }

@@ -14,7 +14,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   securityCheckCode: 1
   allowPInvoke: 0
-  securityRestrictions: {}
+  securityRestrictions:
+    assemblyReferences:
+      defaultBehaviour: 0
+      allowEntries: []
+      denyEntries: []
+      useRegexMatch: 0
+    namespaceReferences:
+      defaultBehaviour: 0
+      allowEntries: []
+      denyEntries: []
+      useRegexMatch: 0
+    typeReferences:
+      defaultBehaviour: 0
+      allowEntries: []
+      denyEntries: []
+      useRegexMatch: 0
+    memberReferences:
+      defaultBehaviour: 0
+      allowEntries: []
+      denyEntries: []
+      useRegexMatch: 0
+    ignoreCase: 0
+    allowPInvoke: 0
   logDetail: 3
   allowUnsafeCode: 0
   allowOptimizeCode: 0
