@@ -66,6 +66,28 @@ namespace Protomod
                 Cursor.visible = false;
             }
         }
+        
+        public bool MatchesFilter( string input, string filter )
+        {
+            input = input.ToLower();
+            filter = filter.ToLower();
+
+            foreach( string filterRaw in filter.Split( ' ' ) )
+            {
+                string filterPiece = filterRaw;
+                bool exclusive = false;
+                if( filterRaw.StartsWith( "-" ) )
+                {
+                    exclusive = true;
+                    filterPiece = filterRaw.Remove( 0, 1 );
+                }
+
+                if( !exclusive && !input.Contains( filterPiece ) ) return false;
+                if( exclusive && input.Contains( filterPiece ) ) return false;
+            }
+
+            return true;
+        }
 
         // Unity Bindings
         private void Start()
@@ -85,6 +107,8 @@ namespace Protomod
 
         private ImGuiInputTextFlags commandLineFlags = ImGuiInputTextFlags.EnterReturnsTrue;
         private ImGuiWindowFlags windowFlags = ImGuiWindowFlags.NoCollapse;
+        private string filterText = "";
+        private string commandLineText = "";
 
         private void OnLayout()
         {
@@ -127,10 +151,10 @@ namespace Protomod
 
             ImGui.Text( "Filter (\"incl,-excl\")" );
             ImGui.SameLine();
-            byte[] filterBuffer = new byte[128];
+
             ImGui.PushItemWidth( -1 );
             ImGui.PushID( "console_filter" );
-            ImGui.InputText( "", filterBuffer, 128 );
+            ImGui.InputText( "", ref filterText, 128 );
             ImGui.PopID();
             ImGui.PopItemWidth();
             // Options End
@@ -154,6 +178,9 @@ namespace Protomod
 
             foreach( ConsoleEntry line in consoleEntries )
             {
+                if( filterText != "" )
+                    if( !MatchesFilter( line.text, filterText ) ) continue;
+
                 if( timestamps )
                 {
                     ImGui.PushStyleColor( ImGuiCol.Text, timestampColor );
@@ -163,9 +190,7 @@ namespace Protomod
                 }
 
                 ImGui.PushStyleColor( ImGuiCol.Text, line.color );
-
                 ImGui.TextUnformatted( line.text );
-
                 ImGui.PopStyleColor();
             }
 
@@ -186,10 +211,11 @@ namespace Protomod
             ImGui.Separator();
 
             // Command Line Start //
-            byte[] commandLineBuffer = new byte[128];
             ImGui.PushItemWidth( -1 );
             ImGui.PushID( "console_commandline" );
-            ImGui.InputText( "", commandLineBuffer, 128, commandLineFlags );
+
+            ImGui.InputText( "", ref commandLineText, 128, commandLineFlags );
+
             ImGui.PopID();
             ImGui.PopItemWidth();
             // Command Line End //
