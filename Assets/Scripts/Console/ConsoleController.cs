@@ -129,7 +129,9 @@ namespace Protomod
             ImGui.SameLine();
             byte[] filterBuffer = new byte[128];
             ImGui.PushItemWidth( -1 );
-            ImGui.InputText( "Filter", filterBuffer, 128 );
+            ImGui.PushID( "console_filter" );
+            ImGui.InputText( "", filterBuffer, 128 );
+            ImGui.PopID();
             ImGui.PopItemWidth();
             // Options End
 
@@ -186,7 +188,9 @@ namespace Protomod
             // Command Line Start //
             byte[] commandLineBuffer = new byte[128];
             ImGui.PushItemWidth( -1 );
-            ImGui.InputText( "Command Line", commandLineBuffer, 128 );
+            ImGui.PushID( "console_commandline" );
+            ImGui.InputText( "", commandLineBuffer, 128 );
+            ImGui.PopID();
             ImGui.PopItemWidth();
             // Command Line End //
 
