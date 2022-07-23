@@ -43,7 +43,7 @@ namespace Protomod
         {
             ConsoleEntry consoleEntry = new ConsoleEntry( newText, color );
             consoleEntries.Add( consoleEntry );
-            shouldScrollToBottom = true;
+            if( autoScroll ) shouldScrollToBottom = true;
         }
 
         public void ThrowError( string errorText ) => AddLineToConsole( "[error] " + errorText, Color.red );
@@ -117,10 +117,12 @@ namespace Protomod
 
             ImGui.SameLine();
 
-            ImGui.Text( "Filter" );
+            ImGui.Text( "Filter (\"incl,-excl\")" );
             ImGui.SameLine();
             byte[] filterBuffer = new byte[128];
-            ImGui.InputText( "", filterBuffer, 128 );
+            ImGui.PushItemWidth( -1 );
+            ImGui.InputText( "Filter", filterBuffer, 128 );
+            ImGui.PopItemWidth();
             // Options End
 
             // Debug //
@@ -167,7 +169,9 @@ namespace Protomod
 
             // Command Line Start //
             byte[] commandLineBuffer = new byte[128];
+            ImGui.PushItemWidth( -1 );
             ImGui.InputText( "Command Line", commandLineBuffer, 128 );
+            ImGui.PopItemWidth();
             // Command Line End //
 
             ImGui.SetItemDefaultFocus();
