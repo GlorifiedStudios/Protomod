@@ -1,7 +1,8 @@
 ﻿
 using ImGuiNET;
-using System.Collections.Generic;
 using UnityEngine;
+using System;
+using System.Collections.Generic;
 
 namespace Protomod
 {
@@ -9,20 +10,20 @@ namespace Protomod
     {
         public string text;
         public Color color;
-        public float timestamp;
+        public DateTime datetime;
 
         public ConsoleEntry( string text )
         {
             this.text = text;
             this.color = Color.white;
-            this.timestamp = Time.realtimeSinceStartup;
+            this.datetime = DateTime.Now;
         }
 
         public ConsoleEntry( string text, Color color )
         {
             this.text = text;
             this.color = color;
-            this.timestamp = Time.realtimeSinceStartup;
+            this.datetime = DateTime.Now;
         }
     }
 
@@ -30,6 +31,7 @@ namespace Protomod
     {
         public List<ConsoleEntry> consoleEntries = new List<ConsoleEntry>();
         public Vector2 defaultWindowSize = new Vector2( 620, 420 );
+        public Color timestampColor = new Color( 1f, 1f, 1f, 0.62f );
         public bool autoScroll = true;
         public bool timestamps = true;
 
@@ -65,13 +67,19 @@ namespace Protomod
             }
         }
 
-        void Update()
+        // Unity Bindings
+        private void Start()
+        {
+            consoleEntries.Add( new ConsoleEntry( "Console initialized" ) );
+        }
+
+        private void Update()
         {
             if( Input.GetKeyDown( KeyCode.F1 ) )
                 ToggleConsole();
         }
 
-        // UI
+        // Drawing
         private void OnEnable() => ImGuiUn.Layout += OnLayout;
         private void OnDisable() => ImGuiUn.Layout -= OnLayout;
 
@@ -144,6 +152,14 @@ namespace Protomod
 
             foreach( ConsoleEntry line in consoleEntries )
             {
+                if( timestamps )
+                {
+                    ImGui.PushStyleColor( ImGuiCol.Text, timestampColor );
+                    ImGui.TextUnformatted( "[" + line.datetime.ToString( "HH:mm:ss" ) + "]" );
+                    ImGui.PopStyleColor();
+                    ImGui.SameLine();
+                }
+
                 ImGui.PushStyleColor( ImGuiCol.Text, line.color );
 
                 ImGui.TextUnformatted( line.text );
