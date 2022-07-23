@@ -124,8 +124,6 @@ namespace Protomod
         {
             if( !consoleActive ) return;
 
-            ImGui.ShowDemoWindow();
-
             // Window Configuration Start //
             ImGui.SetNextWindowSize( defaultWindowSize, ImGuiCond.Once );
 
