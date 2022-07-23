@@ -99,11 +99,15 @@ namespace Protomod
 
         private void Update()
         {
-            if( !consoleActive && Input.GetKeyDown( KeyCode.BackQuote ) )
+            if( Input.GetKeyDown( KeyCode.F1 ) )
+                ToggleConsole();
+
+            // While the below code is very useful, Unity automatically makes the crosshair visible when you press Escape, so this should be used in the future/in 2D games.
+            /*if( !consoleActive && Input.GetKeyDown( KeyCode.BackQuote ) )
                 ToggleConsole();
 
             if( consoleActive && Input.GetKeyDown( KeyCode.Escape ) )
-                ToggleConsole();
+                ToggleConsole();*/
         }
 
         // Drawing
