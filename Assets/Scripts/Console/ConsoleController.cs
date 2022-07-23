@@ -40,6 +40,7 @@ namespace Protomod
         private Vector2 logScrollingRegionSize = Vector2.zero;
         private bool shouldCopy = false;
         private bool shouldScrollToBottom = false;
+        private bool shouldFocusCommandLine = true;
 
         public void AddLineToConsole( string newText, Color color )
         {
@@ -64,6 +65,7 @@ namespace Protomod
             {
                 Cursor.lockState = CursorLockMode.Locked;
                 Cursor.visible = false;
+                shouldFocusCommandLine = true;
             }
         }
         
@@ -224,6 +226,12 @@ namespace Protomod
             // Command Line End //
 
             ImGui.SetItemDefaultFocus();
+
+            if( shouldFocusCommandLine )
+            {
+                ImGui.SetKeyboardFocusHere( -1 );
+                shouldFocusCommandLine = false;
+            }
 
             ImGui.End();
         }
