@@ -12,7 +12,7 @@ namespace Protomod
         public bool autoScroll = true;
         public bool timestamps = true;
 
-        public bool consoleActive = false;
+        public static bool consoleActive = false;
 
         private bool shouldScrollToBottom = false;
 
