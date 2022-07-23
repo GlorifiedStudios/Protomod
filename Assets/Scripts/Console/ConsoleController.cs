@@ -1,13 +1,34 @@
 ﻿
 using ImGuiNET;
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Protomod
 {
+    public struct ConsoleEntry
+    {
+        public string text;
+        public Color color;
+        public float timestamp;
+
+        public ConsoleEntry( string text )
+        {
+            this.text = text;
+            this.color = Color.white;
+            this.timestamp = Time.realtimeSinceStartup;
+        }
+
+        public ConsoleEntry( string text, Color color )
+        {
+            this.text = text;
+            this.color = color;
+            this.timestamp = Time.realtimeSinceStartup;
+        }
+    }
+
     public class ConsoleController : MonoBehaviour
     {
-        public List<string> consoleLines = new List<string>();
+        public List<ConsoleEntry> consoleLines = new List<ConsoleEntry>();
         public Vector2 defaultWindowSize = new Vector2( 620, 420 );
         public bool autoScroll = true;
         public bool timestamps = true;
@@ -16,15 +37,16 @@ namespace Protomod
 
         private bool shouldScrollToBottom = false;
 
-        public void AddLineToConsole( string newText )
+        public void AddLineToConsole( string newText, Color color )
         {
-            consoleLines.Add( newText );
+            ConsoleEntry consoleEntry = new ConsoleEntry( newText, color );
+            consoleLines.Add( consoleEntry );
             shouldScrollToBottom = true;
         }
 
-        public void ThrowError( string errorText ) => AddLineToConsole( "[error] " + errorText );
-        public void ThrowWarning( string warningText ) => AddLineToConsole( "[warning] " + warningText);
-        public void PrintToConsole( string printText ) => AddLineToConsole( printText );
+        public void ThrowError( string errorText ) => AddLineToConsole( "[error] " + errorText, Color.red );
+        public void ThrowWarning( string warningText ) => AddLineToConsole( "[warning] " + warningText, Color.yellow );
+        public void PrintToConsole( string printText ) => AddLineToConsole( printText, Color.white );
 
         public void ToggleConsole()
         {
@@ -73,8 +95,10 @@ namespace Protomod
 
             // Debug //
             if( ImGui.Button( "Test Print" ) ) PrintToConsole( "this is a test print" );
-            ImGui.SameLine(); if( ImGui.Button( "Test Error" ) ) ThrowError( "this is a test print" );
-            ImGui.SameLine(); if( ImGui.Button( "Test Warning" ) ) ThrowWarning( "this is a test print" );
+            ImGui.SameLine();
+            if( ImGui.Button( "Test Error" ) ) ThrowError( "this is a test error" );
+            ImGui.SameLine();
+            if( ImGui.Button( "Test Warning" ) ) ThrowWarning( "this is a test warning" );
             // Debug End //
 
             // Options Start //
@@ -108,26 +132,15 @@ namespace Protomod
 
             // Log Start //
             logScrollingRegionSize.y = -( ImGui.GetStyle().ItemSpacing.y + ImGui.GetFrameHeightWithSpacing() );
-            ImGui.BeginChild( "ScrollingRegion", logScrollingRegionSize, false, ImGuiWindowFlags.HorizontalScrollbar );;
+            ImGui.BeginChild( "ScrollingRegion", logScrollingRegionSize, false, ImGuiWindowFlags.HorizontalScrollbar ); ;
 
-            foreach( string line in consoleLines )
+            foreach( ConsoleEntry line in consoleLines )
             {
-                bool hasColor = false;
+                ImGui.PushStyleColor( ImGuiCol.Text, line.color );
 
-                if( line.Contains( "[error]" ) )
-                {
-                    ImGui.PushStyleColor( ImGuiCol.Text, Color.red );
-                    hasColor = true;
-                } else if( line.Contains( "[warning]" ) )
-                {
-                    ImGui.PushStyleColor( ImGuiCol.Text, Color.yellow );
-                    hasColor = true;
-                }
+                ImGui.TextUnformatted( line.text );
 
-                ImGui.TextUnformatted( line );
-
-                if( hasColor )
-                    ImGui.PopStyleColor();
+                ImGui.PopStyleColor();
             }
 
             if( shouldScrollToBottom || autoScroll && ImGui.GetScrollY() >= ImGui.GetScrollMaxY() )
