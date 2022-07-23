@@ -7,24 +7,24 @@ namespace Protomod
 {
     public class ConsoleController : MonoBehaviour
     {
-        public static List<string> consoleLines = new List<string>();
+        public List<string> consoleLines = new List<string>();
         public Vector2 defaultWindowSize = new Vector2( 620, 420 );
         public bool autoScroll = true;
         public bool timestamps = true;
 
-        public static bool consoleActive = false;
+        public bool consoleActive = false;
 
         private bool shouldScrollToBottom = false;
 
-        public static void AddLineToConsole( string newText )
+        public void AddLineToConsole( string newText )
         {
             consoleLines.Add( newText );
             shouldScrollToBottom = true;
         }
 
-        public static void ThrowError( string errorText ) => AddLineToConsole( "[error] " + errorText );
-        public static void ThrowWarning( string warningText ) => AddLineToConsole( "[warning] " + warningText);
-        public static void PrintToConsole( string printText ) => AddLineToConsole( printText );
+        public void ThrowError( string errorText ) => AddLineToConsole( "[error] " + errorText );
+        public void ThrowWarning( string warningText ) => AddLineToConsole( "[warning] " + warningText);
+        public void PrintToConsole( string printText ) => AddLineToConsole( printText );
 
         public void ToggleConsole()
         {
