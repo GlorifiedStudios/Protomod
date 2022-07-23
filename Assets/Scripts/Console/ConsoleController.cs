@@ -97,7 +97,10 @@ namespace Protomod
 
         private void Update()
         {
-            if( Input.GetKeyDown( KeyCode.F1 ) )
+            if( !consoleActive && Input.GetKeyDown( KeyCode.BackQuote ) )
+                ToggleConsole();
+
+            if( consoleActive && Input.GetKeyDown( KeyCode.Escape ) )
                 ToggleConsole();
         }
 
