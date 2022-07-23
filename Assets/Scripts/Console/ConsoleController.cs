@@ -1,24 +1,30 @@
 ﻿
 using ImGuiNET;
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace Protomod
 {
     public class ConsoleController : MonoBehaviour
     {
+        public static List<string> consoleLines = new List<string>();
         public Vector2 defaultWindowSize = new Vector2( 620, 420 );
-        public bool autoScrollDefault = true;
-        public bool timestampsDefault = true;
+        public bool autoScroll = true;
+        public bool timestamps = true;
 
         public static bool consoleActive = false;
 
+        private bool shouldScrollToBottom = false;
+
         public static void AddLineToConsole( string newText )
         {
+            consoleLines.Add( newText );
+            shouldScrollToBottom = true;
         }
 
-        public static void ThrowError( string errorText ) { }
-        public static void ThrowWarning( string warningText ) { }
-        public static void PrintToConsole( string printText ) { }
+        public static void ThrowError( string errorText ) => AddLineToConsole( "[error] " + errorText );
+        public static void ThrowWarning( string warningText ) => AddLineToConsole( "[warning] " + warningText);
+        public static void PrintToConsole( string printText ) => AddLineToConsole( printText );
 
         public void ToggleConsole()
         {
@@ -65,12 +71,25 @@ namespace Protomod
             }
             // Window Configuration End //
 
+            // Debug //
+            if( ImGui.Button( "Test Print" ) ) PrintToConsole( "this is a test print" );
+            ImGui.SameLine(); if( ImGui.Button( "Test Error" ) ) ThrowError( "this is a test print" );
+            ImGui.SameLine(); if( ImGui.Button( "Test Warning" ) ) ThrowWarning( "this is a test print" );
+            // Debug End //
 
             // Options Start //
+            ImGui.Button( "Copy" );
+
+            ImGui.SameLine();
+
+            ImGui.Button( "Clear" );
+
+            ImGui.SameLine();
+
             if( ImGui.BeginPopup( "Options" ) )
             {
-                ImGui.Checkbox( "Auto-scroll", ref autoScrollDefault );
-                ImGui.Checkbox( "Timestamps", ref timestampsDefault );
+                ImGui.Checkbox( "Auto-scroll", ref autoScroll );
+                ImGui.Checkbox( "Timestamps", ref timestamps );
                 ImGui.EndPopup();
             }
 
@@ -79,22 +98,42 @@ namespace Protomod
 
             ImGui.SameLine();
 
+            ImGui.Text( "Filter" );
+            ImGui.SameLine();
             byte[] filterBuffer = new byte[128];
-            ImGui.InputText( "Filter", filterBuffer, 128 );
+            ImGui.InputText( "", filterBuffer, 128 );
             // Options End
 
             ImGui.Separator();
 
             // Log Start //
             logScrollingRegionSize.y = -( ImGui.GetStyle().ItemSpacing.y + ImGui.GetFrameHeightWithSpacing() );
-            ImGui.BeginChild( "ScrollingRegion", logScrollingRegionSize, false, ImGuiWindowFlags.HorizontalScrollbar );
+            ImGui.BeginChild( "ScrollingRegion", logScrollingRegionSize, false, ImGuiWindowFlags.HorizontalScrollbar );;
 
-            ImGui.LogToClipboard();
+            foreach( string line in consoleLines )
+            {
+                bool hasColor = false;
 
-            ImGui.TextUnformatted( "Test 1" );
-            ImGui.TextUnformatted( "Test 2" );
+                if( line.Contains( "[error]" ) )
+                {
+                    ImGui.PushStyleColor( ImGuiCol.Text, Color.red );
+                    hasColor = true;
+                } else if( line.Contains( "[warning]" ) )
+                {
+                    ImGui.PushStyleColor( ImGuiCol.Text, Color.yellow );
+                    hasColor = true;
+                }
 
-            ImGui.LogFinish();
+                ImGui.TextUnformatted( line );
+
+                if( hasColor )
+                    ImGui.PopStyleColor();
+            }
+
+            if( shouldScrollToBottom || autoScroll && ImGui.GetScrollY() >= ImGui.GetScrollMaxY() )
+                ImGui.SetScrollHereY( 1.0f );
+
+            shouldScrollToBottom = false;
 
             ImGui.EndChild();
             // Log End //
