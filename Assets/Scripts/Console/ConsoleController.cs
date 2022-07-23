@@ -83,6 +83,9 @@ namespace Protomod
         private void OnEnable() => ImGuiUn.Layout += OnLayout;
         private void OnDisable() => ImGuiUn.Layout -= OnLayout;
 
+        private ImGuiInputTextFlags commandLineFlags = ImGuiInputTextFlags.EnterReturnsTrue;
+        private ImGuiWindowFlags windowFlags = ImGuiWindowFlags.NoCollapse;
+
         private void OnLayout()
         {
             if( !consoleActive ) return;
@@ -90,9 +93,6 @@ namespace Protomod
             ImGui.ShowDemoWindow();
 
             // Window Configuration Start //
-            ImGuiWindowFlags windowFlags = 0;
-            windowFlags |= ImGuiWindowFlags.NoCollapse;
-
             ImGui.SetNextWindowSize( defaultWindowSize, ImGuiCond.Once );
 
             if( !ImGui.Begin( "Developer Console", windowFlags ) )
@@ -189,7 +189,7 @@ namespace Protomod
             byte[] commandLineBuffer = new byte[128];
             ImGui.PushItemWidth( -1 );
             ImGui.PushID( "console_commandline" );
-            ImGui.InputText( "", commandLineBuffer, 128 );
+            ImGui.InputText( "", commandLineBuffer, 128, commandLineFlags );
             ImGui.PopID();
             ImGui.PopItemWidth();
             // Command Line End //
