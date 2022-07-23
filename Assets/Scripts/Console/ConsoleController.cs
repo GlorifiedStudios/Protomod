@@ -28,19 +28,21 @@ namespace Protomod
 
     public class ConsoleController : MonoBehaviour
     {
-        public List<ConsoleEntry> consoleLines = new List<ConsoleEntry>();
+        public List<ConsoleEntry> consoleEntries = new List<ConsoleEntry>();
         public Vector2 defaultWindowSize = new Vector2( 620, 420 );
         public bool autoScroll = true;
         public bool timestamps = true;
 
         public static bool consoleActive = false;
 
+        private Vector2 logScrollingRegionSize = Vector2.zero;
+        private bool shouldCopy = false;
         private bool shouldScrollToBottom = false;
 
         public void AddLineToConsole( string newText, Color color )
         {
             ConsoleEntry consoleEntry = new ConsoleEntry( newText, color );
-            consoleLines.Add( consoleEntry );
+            consoleEntries.Add( consoleEntry );
             shouldScrollToBottom = true;
         }
 
@@ -73,7 +75,6 @@ namespace Protomod
         private void OnEnable() => ImGuiUn.Layout += OnLayout;
         private void OnDisable() => ImGuiUn.Layout -= OnLayout;
 
-        private Vector2 logScrollingRegionSize = Vector2.zero;
         private void OnLayout()
         {
             if( !consoleActive ) return;
@@ -93,20 +94,14 @@ namespace Protomod
             }
             // Window Configuration End //
 
-            // Debug //
-            if( ImGui.Button( "Test Print" ) ) PrintToConsole( "this is a test print" );
-            ImGui.SameLine();
-            if( ImGui.Button( "Test Error" ) ) ThrowError( "this is a test error" );
-            ImGui.SameLine();
-            if( ImGui.Button( "Test Warning" ) ) ThrowWarning( "this is a test warning" );
-            // Debug End //
-
             // Options Start //
-            ImGui.Button( "Copy" );
+            if( ImGui.Button( "Copy" ) )
+                shouldCopy = true;
 
             ImGui.SameLine();
 
-            ImGui.Button( "Clear" );
+            if( ImGui.Button( "Clear" ) )
+                consoleEntries.Clear();
 
             ImGui.SameLine();
 
@@ -128,13 +123,24 @@ namespace Protomod
             ImGui.InputText( "", filterBuffer, 128 );
             // Options End
 
+            // Debug //
+            if( ImGui.SmallButton( "Test Print" ) ) PrintToConsole( "this is a test print" );
+            ImGui.SameLine();
+            if( ImGui.SmallButton( "Test Error" ) ) ThrowError( "this is a test error" );
+            ImGui.SameLine();
+            if( ImGui.SmallButton( "Test Warning" ) ) ThrowWarning( "this is a test warning" );
+            // Debug End //
+
             ImGui.Separator();
 
             // Log Start //
             logScrollingRegionSize.y = -( ImGui.GetStyle().ItemSpacing.y + ImGui.GetFrameHeightWithSpacing() );
             ImGui.BeginChild( "ScrollingRegion", logScrollingRegionSize, false, ImGuiWindowFlags.HorizontalScrollbar ); ;
 
-            foreach( ConsoleEntry line in consoleLines )
+            if( shouldCopy )
+                ImGui.LogToClipboard();
+
+            foreach( ConsoleEntry line in consoleEntries )
             {
                 ImGui.PushStyleColor( ImGuiCol.Text, line.color );
 
@@ -148,6 +154,12 @@ namespace Protomod
 
             shouldScrollToBottom = false;
 
+            if( shouldCopy )
+            {
+                ImGui.LogFinish();
+                shouldCopy = false;
+            }
+
             ImGui.EndChild();
             // Log End //
 
@@ -157,6 +169,8 @@ namespace Protomod
             byte[] commandLineBuffer = new byte[128];
             ImGui.InputText( "Command Line", commandLineBuffer, 128 );
             // Command Line End //
+
+            ImGui.SetItemDefaultFocus();
 
             ImGui.End();
         }
