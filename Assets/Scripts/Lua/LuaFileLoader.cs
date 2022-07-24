@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace Protomod.Lua
 {
+    // TODO: Make use of the require function for manual including. See https://www.moonsharp.org/scriptloaders.html
     public class LuaFileLoader : MonoBehaviour
     {
         public LuaEnvironment Environment;
