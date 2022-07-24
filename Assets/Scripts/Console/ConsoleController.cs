@@ -1,4 +1,6 @@
 ﻿
+// TODO: Create a [ConsoleCommand] attribute that can be hooked to methods for easier concommand registration.
+
 using ImGuiNET;
 using UnityEngine;
 using System;
