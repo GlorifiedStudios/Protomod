@@ -14,7 +14,7 @@ namespace Protomod.Lua
         public Script Script;
         public Console Console;
 
-        public static event Action OnLuaInitialized;
+        public static event Action OnLuaInitialized = () => { };
 
         private Color fileIncludedColor = new Color( 0.5f, 0.62f, 0.9f );
 
@@ -75,7 +75,7 @@ namespace Protomod.Lua
         private void OnEnable() => Instance = this;
         private void OnDisable() => Instance = null;
 
-        private void Awake()
+        private void Start()
         {
             InitializeLuaEnvironment();
 
