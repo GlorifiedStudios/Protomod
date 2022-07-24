@@ -3,6 +3,7 @@ using ImGuiNET;
 using UnityEngine;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Protomod
 {
@@ -30,9 +31,9 @@ namespace Protomod
     public struct ConsoleCommand
     {
         public string command;
-        public Action<string[]> method;
+        public Action<List<string>> method;
 
-        public void Execute( string[] args )
+        public void Execute( List<string> args )
         {
             if( method == null ) return;
             method.Invoke( args );
@@ -44,7 +45,7 @@ namespace Protomod
             this.method = null;
         }
 
-        public ConsoleCommand( string command, Action<string[]> method )
+        public ConsoleCommand( string command, Action<List<string>> method )
         {
             this.command = command;
             this.method = method;
@@ -59,6 +60,7 @@ namespace Protomod
         public int maxConsoleEntries = 100;
         public Vector2 defaultWindowSize = new Vector2( 620, 420 );
         public Color timestampColor = new Color( 1f, 1f, 1f, 0.62f );
+        public Color commandSentColor = new Color( 1f, 0.8f, 0.6f );
         public bool autoScroll = true;
         public bool timestamps = true;
 
@@ -97,13 +99,18 @@ namespace Protomod
                 shouldFocusCommandLine = true;
             }
         }
+
+        public string[] SplitAndTrimBySpaces( string input )
+        {
+            return input.Split( ' ' ).Select( p => p.Trim() ).Where( p => !string.IsNullOrWhiteSpace( p ) ).ToArray();
+        }
         
         public bool MatchesFilter( string input, string filter )
         {
             input = input.ToLower();
             filter = filter.ToLower();
 
-            foreach( string filterRaw in filter.Split( ' ' ) )
+            foreach( string filterRaw in SplitAndTrimBySpaces( filter ) )
             {
                 string filterPiece = filterRaw;
                 bool exclusive = false;
@@ -120,16 +127,33 @@ namespace Protomod
             return true;
         }
 
-        private void TestCommand( string[] args )
+        public bool ExecuteCommandLineString( string cmdLineRaw )
         {
-            Debug.Log( "Balls" );
+            AddLineToConsole( "# " + cmdLineRaw, commandSentColor );
+
+            string[] cmdSplit = SplitAndTrimBySpaces( cmdLineRaw );
+            string command = cmdSplit[0];
+            List<string> args = new List<string>( cmdSplit );
+            args.RemoveAt( 0 );
+
+            foreach( ConsoleCommand consoleCommand in ConsoleCommands )
+            {
+                if( consoleCommand.command == command )
+                {
+                    consoleCommand.Execute( args );
+                    return true;
+                }
+            }
+
+            PrintToConsole( "Undefined command '" + command + "'" );
+
+            return false;
         }
 
         // Unity Bindings
         private void Start()
         {
             ConsoleEntries.Add( new ConsoleEntry( "Console initialized" ) );
-            ConsoleCommands.Add( new ConsoleCommand( "test", TestCommand ) );
         }
 
         private void Update()
@@ -256,9 +280,12 @@ namespace Protomod
             // Command Line Start //
             ImGui.PushItemWidth( -1 );
             ImGui.PushID( "console_commandline" );
-
-            ImGui.InputText( "", ref commandLineText, 128, commandLineFlags );
-
+            if( ImGui.InputText( "", ref commandLineText, 128, commandLineFlags ) )
+            {
+                ExecuteCommandLineString( commandLineText );
+                commandLineText = "";
+                shouldFocusCommandLine = true;
+            }
             ImGui.PopID();
             ImGui.PopItemWidth();
             // Command Line End //
