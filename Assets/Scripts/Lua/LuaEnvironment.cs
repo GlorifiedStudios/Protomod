@@ -33,6 +33,7 @@ namespace Protomod.Lua
             try
             {
                 DynValue output = Script.DoFile( file );
+                Console.PrintToConsole( "Included Lua file " + file );
                 return output;
             } catch( InterpreterException ex )
             {
