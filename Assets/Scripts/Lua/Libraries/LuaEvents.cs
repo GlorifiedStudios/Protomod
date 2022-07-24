@@ -7,7 +7,7 @@ namespace Protomod.Lua
     [MoonSharpUserData]
     public class LuaEvents
     {
-        public static Dictionary<string, List<Closure>> RegisteredEvents;
+        public static Dictionary<string, List<Closure>> RegisteredEvents = new Dictionary<string, List<Closure>>();
 
         public static Closure Register( string eventId, Closure closure )
         {
@@ -36,12 +36,16 @@ namespace Protomod.Lua
                 closure.Call();
         }
 
-        public static void Call( string eventId, DynValue[] args )
+        public static void Call( string eventId, CallbackArguments args )
         {
+            // Since we want to support varargs with this function, we have to remove the 1st value from the argument list.
+            List<DynValue> argValues = new List<DynValue>( args.GetArray() );
+            argValues.RemoveAt( 0 );
+            
             if( !RegisteredEvents.ContainsKey( eventId ) ) return;
 
             foreach( Closure closure in RegisteredEvents[eventId] )
-                closure.Call( args );
+                closure.Call( argValues.ToArray() );
         }
     }
 }
