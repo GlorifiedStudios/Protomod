@@ -331,5 +331,19 @@ namespace Protomod
 
             ImGui.End();
         }
+
+        // Help Command
+        private void HelpCommandCalled( string[] args )
+        {
+            string consoleCommandsFormatted = "";
+            foreach( ConsoleCommand consoleCommand in ConsoleCommands )
+                consoleCommandsFormatted = consoleCommandsFormatted + consoleCommand.command + "\n";
+            AddLineToConsole( consoleCommandsFormatted, Color.grey );
+        }
+
+        private void Start()
+        {
+            RegisterConsoleCommand( "help", HelpCommandCalled );
+        }
     }
 }
