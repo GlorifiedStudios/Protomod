@@ -1052,7 +1052,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98921fc21077b0d43bab6915b5fa4bb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxConsoleEntries: 100
   defaultWindowSize: {x: 620, y: 420}
+  timestampColor: {r: 1, g: 1, b: 1, a: 0.62}
+  autoScroll: 1
+  timestamps: 1
 --- !u!1 &1487643179
 GameObject:
   m_ObjectHideFlags: 0
