@@ -16,6 +16,10 @@ namespace Protomod.Lua
         public void InitializeLuaEnvironment()
         {
             Script = new Script();
+
+            // Hook our libraries to Lua globals.
+            UserData.RegisterAssembly();
+            Script.Globals["Event"] = new LuaEvents();
         }
 
         public DynValue LoadLuaFile( string file )

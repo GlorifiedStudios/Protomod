@@ -4,6 +4,7 @@ using MoonSharp.Interpreter;
 
 namespace Protomod.Lua
 {
+    [MoonSharpUserData]
     public class LuaEvents
     {
         public static Dictionary<string, List<Closure>> RegisteredEvents;
