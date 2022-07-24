@@ -23,6 +23,8 @@ namespace Protomod.Lua
             foreach( string folder in Directory.GetDirectories( GetModsPath(), "*.*", SearchOption.AllDirectories ) )
                 foreach( string file in Directory.GetFiles( folder, "*.lua", SearchOption.AllDirectories ) )
                     Environment.LoadLuaFile( file );
+
+            LuaEvents.Call( "ModsLoaded" );
         }
 
         private void OnEnable() => LuaEnvironment.OnLuaInitialized += OnLuaInitialized;

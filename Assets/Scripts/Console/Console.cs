@@ -341,9 +341,6 @@ namespace Protomod
             AddLineToConsole( consoleCommandsFormatted, Color.grey );
         }
 
-        private void Start()
-        {
-            RegisterConsoleCommand( "help", HelpCommandCalled );
-        }
+        private void Start() => RegisterConsoleCommand( "help", HelpCommandCalled );
     }
 }
