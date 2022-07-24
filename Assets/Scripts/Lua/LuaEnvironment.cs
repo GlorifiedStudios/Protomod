@@ -79,7 +79,7 @@ namespace Protomod.Lua
         {
             InitializeLuaEnvironment();
 
-            Console.RegisterConsoleCommand( "luarun", LuaRunCalled );
+            Console.RegisterConsoleCommand( "lua_run", LuaRunCalled );
         }
     }
 }

@@ -1299,6 +1299,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 989164d476041474d8da343944fd3ae5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  LuaInitialized: 0
   Console: {fileID: 1400616868}
 --- !u!114 &1572408115
 MonoBehaviour:
@@ -1313,6 +1314,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Environment: {fileID: 1572408114}
+  Console: {fileID: 1400616868}
+  ModFolderName: Mods
 --- !u!43 &1578088168
 Mesh:
   m_ObjectHideFlags: 0

@@ -10,6 +10,7 @@ namespace Protomod.Lua
     public class LuaFileLoader : MonoBehaviour
     {
         public LuaEnvironment Environment;
+        public Console Console;
         public string ModFolderName = "Mods";
 
         public string GetModsPath()
@@ -27,9 +28,15 @@ namespace Protomod.Lua
         private void OnEnable() => LuaEnvironment.OnLuaInitialized += OnLuaInitialized;
         private void OnDisable() => LuaEnvironment.OnLuaInitialized -= OnLuaInitialized;
 
+        private void LuaRefreshCalled( string[] args )
+        {
+            LoadAllMods();
+        }
+
         private void OnLuaInitialized()
         {
             LoadAllMods();
+            Console.RegisterConsoleCommand( "lua_refresh", LuaRefreshCalled );
         }
     }
 }
