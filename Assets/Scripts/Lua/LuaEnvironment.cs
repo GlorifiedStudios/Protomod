@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using MoonSharp.Interpreter;
 
-namespace Protomod
+namespace Protomod.Lua
 {
     public class LuaEnvironment : MonoBehaviour
     {
