@@ -9,7 +9,7 @@ namespace Protomod
     public class LuaEnvironment : MonoBehaviour
     {
         public static LuaEnvironment Instance;
-        public Script Environment;
+        public Script Script;
         public Console Console;
 
         // Unity Bindings

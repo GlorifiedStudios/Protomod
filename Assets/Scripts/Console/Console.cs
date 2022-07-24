@@ -258,7 +258,7 @@ namespace Protomod
 
             foreach( ConsoleEntry line in ConsoleEntries )
             {
-                if( filterText != "" )
+                if( !string.IsNullOrWhiteSpace( filterText ) )
                     if( !MatchesFilter( line.text, filterText ) ) continue;
 
                 if( timestamps )
@@ -293,7 +293,7 @@ namespace Protomod
             // Command Line Start //
             ImGui.PushItemWidth( -1 );
             ImGui.PushID( "console_commandline" );
-            if( ImGui.InputText( "", ref commandLineText, 128, commandLineFlags ) )
+            if( ImGui.InputText( "", ref commandLineText, 128, commandLineFlags ) && !string.IsNullOrWhiteSpace( commandLineText ) )
             {
                 ExecuteCommandLineString( commandLineText );
                 commandLineText = "";
