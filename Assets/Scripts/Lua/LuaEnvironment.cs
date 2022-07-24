@@ -37,7 +37,22 @@ namespace Protomod
             }
         }
 
-        // Unity Bindings
+        public DynValue RunString( string lua )
+        {
+            try
+            {
+                DynValue output = Script.DoString( lua );
+                return output;
+            } catch( InterpreterException ex )
+            {
+                Console.ThrowLuaExceptionToConsole( ex );
+                return DynValue.Nil;
+            }
+        }
+
+        // External Bindings
+        public void LuaRunCalled( string[] args ) => RunString( string.Join( " ", args ) );
+
         private void OnEnable() => Instance = this;
         private void OnDisable() => Instance = null;
 
@@ -46,7 +61,8 @@ namespace Protomod
             Console = Console.Instance;
             Script.DefaultOptions.DebugPrint = print => Console.PrintToConsole( print );
             InitializeLuaEnvironment();
-            LoadLuaFile( "balls.lua" );
+
+            Console.RegisterConsoleCommand( "luarun", LuaRunCalled );
         }
     }
 }

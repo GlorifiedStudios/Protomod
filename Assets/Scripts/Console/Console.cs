@@ -93,8 +93,6 @@ namespace Protomod
         {
             string niceMessage = ex.DecoratedMessage;
             niceMessage = niceMessage.Replace( @"\", "/" );
-            int modulesIndex = niceMessage.IndexOf( "modules" );
-            niceMessage = niceMessage.Substring( modulesIndex, niceMessage.Length - modulesIndex );
             ThrowError( "Lua error:\n" + niceMessage );
         }
 
@@ -142,6 +140,11 @@ namespace Protomod
             return true;
         }
 
+        public void RegisterConsoleCommand( string command, Action<string[]> callback )
+        {
+            ConsoleCommands.Add( new ConsoleCommand( command, callback ) );
+        }
+
         public bool ExecuteCommandLineString( string cmdLineRaw )
         {
             AddLineToConsole( "# " + cmdLineRaw, commandSentColor );
@@ -181,7 +184,7 @@ namespace Protomod
 
         private void OnEnable()
         {
-            ConsoleEntries.Add( new ConsoleEntry( "Console initialized" ) );
+            PrintToConsole( "Console initialized" );
             ImGuiUn.Layout += OnLayout;
             Instance = this;
         }
