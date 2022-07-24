@@ -54,9 +54,9 @@ namespace Protomod
         }
     }
 
-    public class ConsoleController : MonoBehaviour
+    public class Console : MonoBehaviour
     {
-        public static ConsoleController Instance;
+        public static Console Instance;
 
         public List<ConsoleEntry> ConsoleEntries = new List<ConsoleEntry>();
         public List<ConsoleCommand> ConsoleCommands = new List<ConsoleCommand>();

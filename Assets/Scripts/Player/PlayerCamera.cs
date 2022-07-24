@@ -20,7 +20,7 @@ namespace Protomod.Player
 
         private void Update()
         {
-            if( ConsoleController.consoleActive ) { return; }
+            if( Console.consoleActive ) { return; }
             CameraRotation();
         }
 

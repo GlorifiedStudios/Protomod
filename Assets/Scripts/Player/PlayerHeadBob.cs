@@ -21,7 +21,7 @@ namespace Protomod.Player
             float waveslice = 0.0f;
             float horizontal = Input.GetAxis( "Horizontal" );
             float vertical = Input.GetAxis( "Vertical" );
-            if( ConsoleController.consoleActive ) { horizontal = 0; vertical = 0; }
+            if( Console.consoleActive ) { horizontal = 0; vertical = 0; }
 
             Vector3 cSharpConversion = transform.localPosition;
 

@@ -32,7 +32,7 @@ namespace Protomod.Player
         {
             float horizontal = Input.GetAxis( "Horizontal" ) * movementSpeed;
             float vertical = Input.GetAxis( "Vertical" ) * movementSpeed;
-            if( ConsoleController.consoleActive ) { horizontal = 0; vertical = 0; }
+            if( Console.consoleActive ) { horizontal = 0; vertical = 0; }
 
             Vector3 forwardMovement = transform.forward * vertical;
             Vector3 rightMovement = transform.right * horizontal;
