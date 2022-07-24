@@ -62,7 +62,7 @@ namespace Protomod
         public List<ConsoleEntry> ConsoleEntries = new List<ConsoleEntry>();
         public List<ConsoleCommand> ConsoleCommands = new List<ConsoleCommand>();
 
-        public int maxConsoleEntries = 100;
+        public int maxConsoleEntries = 1000;
         public Vector2 defaultWindowSize = new Vector2( 620, 420 );
         public Color timestampColor = new Color( 1f, 1f, 1f, 0.62f );
         public Color commandSentColor = new Color( 1f, 0.8f, 0.6f );

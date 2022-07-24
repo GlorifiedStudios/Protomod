@@ -1052,7 +1052,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98921fc21077b0d43bab6915b5fa4bb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxConsoleEntries: 100
+  maxConsoleEntries: 1000
   defaultWindowSize: {x: 620, y: 420}
   timestampColor: {r: 1, g: 1, b: 1, a: 0.62}
   commandSentColor: {r: 1, g: 0.8, b: 0.6, a: 1}
