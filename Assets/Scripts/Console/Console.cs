@@ -293,11 +293,14 @@ namespace Protomod
             // Command Line Start //
             ImGui.PushItemWidth( -1 );
             ImGui.PushID( "console_commandline" );
-            if( ImGui.InputText( "", ref commandLineText, 128, commandLineFlags ) && !string.IsNullOrWhiteSpace( commandLineText ) )
+            if( ImGui.InputText( "", ref commandLineText, 128, commandLineFlags ) )
             {
-                ExecuteCommandLineString( commandLineText );
-                commandLineText = "";
                 shouldFocusCommandLine = true;
+                if( !string.IsNullOrWhiteSpace( commandLineText ) )
+                {
+                    ExecuteCommandLineString( commandLineText );
+                    commandLineText = "";
+                }
             }
             ImGui.PopID();
             ImGui.PopItemWidth();
