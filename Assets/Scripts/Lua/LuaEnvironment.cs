@@ -16,6 +16,8 @@ namespace Protomod.Lua
 
         public static event Action OnLuaInitialized;
 
+        private Color fileIncludedColor = new Color( 0.5f, 0.62f, 0.9f );
+
         public void InitializeLuaEnvironment()
         {
             Script = new Script();
@@ -33,16 +35,19 @@ namespace Protomod.Lua
 
         public DynValue LoadLuaFile( string file )
         {
+            int modsIndex = file.IndexOf( "Mods" );
+            string fileNiceName = file.Substring( modsIndex, file.Length - modsIndex );
+
             if( Path.GetExtension( file ) != ".lua" || !File.Exists( file ) )
             {
-                Console.ThrowWarning( "Failed to include Lua file: " + file );
+                Console.ThrowWarning( "Failed to include Lua file '" + fileNiceName + "'" );
                 return DynValue.Nil;
             }
 
             try
             {
+                Console.AddLineToConsole( "Including Lua file '" + fileNiceName + "'", fileIncludedColor );
                 DynValue output = Script.DoFile( file );
-                Console.PrintToConsole( "Included Lua file " + file );
                 return output;
             } catch( InterpreterException ex )
             {
