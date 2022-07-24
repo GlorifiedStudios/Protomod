@@ -57,8 +57,6 @@ namespace Protomod
 
     public class Console : MonoBehaviour
     {
-        public static Console Instance;
-
         public List<ConsoleEntry> ConsoleEntries = new List<ConsoleEntry>();
         public List<ConsoleCommand> ConsoleCommands = new List<ConsoleCommand>();
 
@@ -140,8 +138,17 @@ namespace Protomod
             return true;
         }
 
+        public bool ConsoleCommandExists( string command )
+        {
+            foreach( ConsoleCommand consoleCommand in ConsoleCommands )
+                if( consoleCommand.command == command.ToLower() ) return true;
+
+            return false;
+        }
+
         public void RegisterConsoleCommand( string command, Action<string[]> callback )
         {
+            if( ConsoleCommandExists( command ) ) return;
             ConsoleCommands.Add( new ConsoleCommand( command, callback ) );
         }
 
@@ -182,18 +189,9 @@ namespace Protomod
             */
         }
 
-        private void OnEnable()
-        {
-            PrintToConsole( "Console initialized" );
-            ImGuiUn.Layout += OnLayout;
-            Instance = this;
-        }
 
-        private void OnDisable()
-        {
-            ImGuiUn.Layout -= OnLayout;
-            Instance = null;
-        }
+        private void OnEnable() => ImGuiUn.Layout += OnLayout;
+        private void OnDisable() => ImGuiUn.Layout -= OnLayout;
 
         // Drawing
         private ImGuiInputTextFlags commandLineFlags = ImGuiInputTextFlags.EnterReturnsTrue;

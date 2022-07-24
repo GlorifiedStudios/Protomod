@@ -1,25 +1,34 @@
 
 using System.IO;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using MoonSharp.Interpreter;
+using System;
+using MoonSharp.Interpreter.Loaders;
 
 namespace Protomod.Lua
 {
     public class LuaEnvironment : MonoBehaviour
     {
+        public bool LuaInitialized = false;
         public static LuaEnvironment Instance;
         public Script Script;
         public Console Console;
 
+        public static event Action OnLuaInitialized;
+
         public void InitializeLuaEnvironment()
         {
             Script = new Script();
+            Script.Options.ScriptLoader = new FileSystemScriptLoader();
+            Script.Options.DebugPrint = print => Console.PrintToConsole( print );
 
             // Hook our libraries to Lua globals.
             UserData.RegisterAssembly();
             Script.Globals["Event"] = new LuaEvents();
+
+            LuaInitialized = true;
+
+            OnLuaInitialized.Invoke();
         }
 
         public DynValue LoadLuaFile( string file )
@@ -61,10 +70,8 @@ namespace Protomod.Lua
         private void OnEnable() => Instance = this;
         private void OnDisable() => Instance = null;
 
-        private void Start()
+        private void Awake()
         {
-            Console = Console.Instance;
-            Script.DefaultOptions.DebugPrint = print => Console.PrintToConsole( print );
             InitializeLuaEnvironment();
 
             Console.RegisterConsoleCommand( "luarun", LuaRunCalled );
