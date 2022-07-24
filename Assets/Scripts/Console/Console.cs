@@ -6,6 +6,7 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using MoonSharp.Interpreter;
 
 namespace Protomod
 {
@@ -88,6 +89,15 @@ namespace Protomod
         public void ThrowWarning( string warningText ) => AddLineToConsole( "[warning] " + warningText, Color.yellow );
         public void PrintToConsole( string printText ) => AddLineToConsole( printText, Color.white );
 
+        public void ThrowLuaExceptionToConsole( InterpreterException ex )
+        {
+            string niceMessage = ex.DecoratedMessage;
+            niceMessage = niceMessage.Replace( @"\", "/" );
+            int modulesIndex = niceMessage.IndexOf( "modules" );
+            niceMessage = niceMessage.Substring( modulesIndex, niceMessage.Length - modulesIndex );
+            ThrowError( "Lua error:\n" + niceMessage );
+        }
+
         public void ToggleConsole()
         {
             consoleActive = !consoleActive;
@@ -155,11 +165,6 @@ namespace Protomod
         }
 
         // Unity Bindings
-        private void Start()
-        {
-            ConsoleEntries.Add( new ConsoleEntry( "Console initialized" ) );
-        }
-
         private void Update()
         {
             if( Input.GetKeyDown( KeyCode.F1 ) )
@@ -176,6 +181,7 @@ namespace Protomod
 
         private void OnEnable()
         {
+            ConsoleEntries.Add( new ConsoleEntry( "Console initialized" ) );
             ImGuiUn.Layout += OnLayout;
             Instance = this;
         }
