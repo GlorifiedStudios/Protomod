@@ -31,9 +31,9 @@ namespace Protomod
     public struct ConsoleCommand
     {
         public string command;
-        public Action<List<string>> method;
+        public Action<string[]> method;
 
-        public void Execute( List<string> args )
+        public void Execute( string[] args )
         {
             if( method == null ) return;
             method.Invoke( args );
@@ -45,7 +45,7 @@ namespace Protomod
             this.method = null;
         }
 
-        public ConsoleCommand( string command, Action<List<string>> method )
+        public ConsoleCommand( string command, Action<string[]> method )
         {
             this.command = command;
             this.method = method;
@@ -140,7 +140,7 @@ namespace Protomod
             {
                 if( consoleCommand.command == command )
                 {
-                    consoleCommand.Execute( args );
+                    consoleCommand.Execute( args.ToArray() );
                     return true;
                 }
             }
