@@ -27,9 +27,35 @@ namespace Protomod
         }
     }
 
+    public struct ConsoleCommand
+    {
+        public string command;
+        public Action<string[]> method;
+
+        public void Execute( string[] args )
+        {
+            if( method == null ) return;
+            method.Invoke( args );
+        }
+
+        public ConsoleCommand( string command )
+        {
+            this.command = command;
+            this.method = null;
+        }
+
+        public ConsoleCommand( string command, Action<string[]> method )
+        {
+            this.command = command;
+            this.method = method;
+        }
+    }
+
     public class ConsoleController : MonoBehaviour
     {
-        public List<ConsoleEntry> consoleEntries = new List<ConsoleEntry>();
+        public List<ConsoleEntry> ConsoleEntries = new List<ConsoleEntry>();
+        public List<ConsoleCommand> ConsoleCommands = new List<ConsoleCommand>();
+
         public int maxConsoleEntries = 100;
         public Vector2 defaultWindowSize = new Vector2( 620, 420 );
         public Color timestampColor = new Color( 1f, 1f, 1f, 0.62f );
@@ -46,10 +72,10 @@ namespace Protomod
         public void AddLineToConsole( string newText, Color color )
         {
             ConsoleEntry consoleEntry = new ConsoleEntry( newText, color );
-            consoleEntries.Add( consoleEntry );
+            ConsoleEntries.Add( consoleEntry );
             if( autoScroll ) shouldScrollToBottom = true;
-            if( consoleEntries.Count >= maxConsoleEntries )
-                consoleEntries.RemoveRange( 0, ( consoleEntries.Count - maxConsoleEntries ) );
+            if( ConsoleEntries.Count >= maxConsoleEntries )
+                ConsoleEntries.RemoveRange( 0, ( ConsoleEntries.Count - maxConsoleEntries ) );
         }
 
         public void ThrowError( string errorText ) => AddLineToConsole( "[error] " + errorText, Color.red );
@@ -94,10 +120,16 @@ namespace Protomod
             return true;
         }
 
+        private void TestCommand( string[] args )
+        {
+            Debug.Log( "Balls" );
+        }
+
         // Unity Bindings
         private void Start()
         {
-            consoleEntries.Add( new ConsoleEntry( "Console initialized" ) );
+            ConsoleEntries.Add( new ConsoleEntry( "Console initialized" ) );
+            ConsoleCommands.Add( new ConsoleCommand( "test", TestCommand ) );
         }
 
         private void Update()
@@ -144,7 +176,7 @@ namespace Protomod
             ImGui.SameLine();
 
             if( ImGui.Button( "Clear" ) )
-                consoleEntries.Clear();
+                ConsoleEntries.Clear();
 
             ImGui.SameLine();
 
@@ -187,7 +219,7 @@ namespace Protomod
             if( shouldCopy )
                 ImGui.LogToClipboard();
 
-            foreach( ConsoleEntry line in consoleEntries )
+            foreach( ConsoleEntry line in ConsoleEntries )
             {
                 if( filterText != "" )
                     if( !MatchesFilter( line.text, filterText ) ) continue;
