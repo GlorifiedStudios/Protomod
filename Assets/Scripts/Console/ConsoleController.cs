@@ -56,6 +56,8 @@ namespace Protomod
 
     public class ConsoleController : MonoBehaviour
     {
+        public static ConsoleController Instance;
+
         public List<ConsoleEntry> ConsoleEntries = new List<ConsoleEntry>();
         public List<ConsoleCommand> ConsoleCommands = new List<ConsoleCommand>();
 
@@ -107,6 +109,7 @@ namespace Protomod
             return input.Split( ' ' ).Select( p => p.Trim() ).Where( p => !string.IsNullOrWhiteSpace( p ) ).ToArray();
         }
         
+        // TODO: This can be simplified by a regular expression.
         public bool MatchesFilter( string input, string filter )
         {
             input = input.ToLower();
@@ -148,7 +151,6 @@ namespace Protomod
             }
 
             PrintToConsole( "Undefined command '" + command + "'" );
-
             return false;
         }
 
@@ -172,10 +174,19 @@ namespace Protomod
             */
         }
 
-        // Drawing
-        private void OnEnable() => ImGuiUn.Layout += OnLayout;
-        private void OnDisable() => ImGuiUn.Layout -= OnLayout;
+        private void OnEnable()
+        {
+            ImGuiUn.Layout += OnLayout;
+            Instance = this;
+        }
 
+        private void OnDisable()
+        {
+            ImGuiUn.Layout -= OnLayout;
+            Instance = null;
+        }
+
+        // Drawing
         private ImGuiInputTextFlags commandLineFlags = ImGuiInputTextFlags.EnterReturnsTrue;
         private ImGuiWindowFlags windowFlags = ImGuiWindowFlags.NoCollapse;
         private string filterText = "";
