@@ -239,6 +239,7 @@ namespace Protomod
             ImGui.SameLine();
 
             ImGui.Text( "Filter (\"incl,-excl\")" );
+
             ImGui.SameLine();
 
             ImGui.PushItemWidth( -1 );
@@ -249,11 +250,18 @@ namespace Protomod
             // Options End
 
             // Debug //
-            if( ImGui.SmallButton( "Test Print" ) ) PrintToConsole( "this is a test print" );
+            if( ImGui.SmallButton( "Test Print" ) )
+                PrintToConsole( "this is a test print" );
+
             ImGui.SameLine();
-            if( ImGui.SmallButton( "Test Error" ) ) ThrowError( "this is a test error" );
+
+            if( ImGui.SmallButton( "Test Error" ) )
+                ThrowError( "this is a test error" );
+
             ImGui.SameLine();
-            if( ImGui.SmallButton( "Test Warning" ) ) ThrowWarning( "this is a test warning" );
+
+            if( ImGui.SmallButton( "Test Warning" ) )
+                ThrowWarning( "this is a test warning" );
             // Debug End //
 
             ImGui.Separator();
