@@ -152,7 +152,6 @@ namespace Protomod
             {
                 ImGui.Checkbox( "Auto-scroll", ref autoScroll );
                 ImGui.Checkbox( "Timestamps", ref timestamps );
-                ImGui.SliderInt( "Max Console Entries", ref maxConsoleEntries, 5, 1000 );
                 ImGui.EndPopup();
             }
 
