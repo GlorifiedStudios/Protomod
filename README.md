@@ -10,4 +10,4 @@ You can find most of the meat under the `Assets/Scripts/Lua` folder.
 
 Press `F1` to toggle the ingame console.
 
-![Screenshot of the in-game console](https://i.imgur.com/zfWJTXR.png)
+![Screenshot of the in-game console](https://i.imgur.com/YYHVN4r.png)
