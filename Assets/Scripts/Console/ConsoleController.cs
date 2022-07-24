@@ -30,7 +30,7 @@ namespace Protomod
     public class ConsoleController : MonoBehaviour
     {
         public List<ConsoleEntry> consoleEntries = new List<ConsoleEntry>();
-        public uint maxConsoleEntries = 100;
+        public int maxConsoleEntries = 100;
         public Vector2 defaultWindowSize = new Vector2( 620, 420 );
         public Color timestampColor = new Color( 1f, 1f, 1f, 0.62f );
         public bool autoScroll = true;
@@ -49,7 +49,7 @@ namespace Protomod
             consoleEntries.Add( consoleEntry );
             if( autoScroll ) shouldScrollToBottom = true;
             if( consoleEntries.Count >= maxConsoleEntries )
-                consoleEntries.RemoveAt( 0 );
+                consoleEntries.RemoveRange( 0, ( consoleEntries.Count - maxConsoleEntries ) );
         }
 
         public void ThrowError( string errorText ) => AddLineToConsole( "[error] " + errorText, Color.red );
@@ -152,6 +152,7 @@ namespace Protomod
             {
                 ImGui.Checkbox( "Auto-scroll", ref autoScroll );
                 ImGui.Checkbox( "Timestamps", ref timestamps );
+                ImGui.SliderInt( "Max Console Entries", ref maxConsoleEntries, 5, 1000 );
                 ImGui.EndPopup();
             }
 
