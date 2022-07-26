@@ -11,7 +11,7 @@ namespace Protomod.Lua
     {
         public LuaEnvironment Environment;
         public Console Console;
-        public string ModFolderName = "Mods";
+        public static string ModFolderName = "Mods";
 
         public string GetModsPath()
         {

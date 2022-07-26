@@ -33,9 +33,10 @@ namespace Protomod.Lua
             OnLuaInitialized.Invoke();
         }
 
+        // TODO: Organize this because this could be under LuaFileLoader.
         public DynValue LoadLuaFile( string file )
         {
-            int modsIndex = file.IndexOf( "Mods" );
+            int modsIndex = file.IndexOf( LuaFileLoader.ModFolderName );
             string fileNiceName = file.Substring( modsIndex, file.Length - modsIndex );
 
             if( Path.GetExtension( file ) != ".lua" || !File.Exists( file ) )
